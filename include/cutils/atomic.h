@@ -19,7 +19,11 @@
 
 #include <stdint.h>
 #include <sys/types.h>
+#ifdef BUILD_WITH_LINARO
+#include <atomic>
+#else
 #include <stdatomic.h>
+#endif
 
 #ifndef ANDROID_ATOMIC_INLINE
 #define ANDROID_ATOMIC_INLINE static inline
@@ -70,6 +74,10 @@
  * NOTE: all int32_t* values are expected to be aligned on 32-bit boundaries.
  * If they are not, atomicity is not guaranteed.
  */
+
+#ifdef BUILD_WITH_LINARO
+using namespace std;
+#endif
 
 /*
  * Basic arithmetic and bitwise operations.  These all provide a
