@@ -23,6 +23,10 @@
 
 #include <string>
 
+#ifdef BUILD_WITH_LINARO
+#include <cstring>
+#endif
+
 #include "android-base/macros.h"  // For TEMP_FAILURE_RETRY on Darwin.
 #include "android-base/utf8.h"
 #define LOG_TAG "base.file"
