@@ -23,6 +23,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef BUILD_WITH_LINARO
+#include <sys/syscall.h>
+#endif
 #include <time.h>
 
 #include <log/log.h>
@@ -145,7 +148,11 @@ static int pmsgWrite(log_id_t logId, struct timespec *ts,
     pmsgHeader.pid = getpid();
 
     header.id = logId;
+#ifndef BUILD_WITH_LINARO
     header.tid = gettid();
+#else
+    header.tid = syscall(SYS_gettid);
+#endif
     header.realtime.tv_sec = ts->tv_sec;
     header.realtime.tv_nsec = ts->tv_nsec;
 

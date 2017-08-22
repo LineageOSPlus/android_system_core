@@ -30,6 +30,9 @@
 #include <sys/un.h>
 #include <time.h>
 #include <unistd.h>
+#ifdef BUILD_WITH_LINARO
+#include <signal.h>
+#endif
 
 #include <cutils/sockets.h>
 #include <log/logd.h>
@@ -44,6 +47,10 @@
 
 /* branchless on many architectures. */
 #define min(x,y) ((y) ^ (((x) ^ (y)) & -((x) < (y))))
+
+#ifdef BUILD_WITH_LINARO
+#define PAGE_SIZE getpagesize()
+#endif
 
 static int logdAvailable(log_id_t LogId);
 static int logdVersion(struct android_log_logger *logger,
