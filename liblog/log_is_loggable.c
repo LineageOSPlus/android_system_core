@@ -19,12 +19,13 @@
 #include <stdlib.h>
 #include <string.h>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
-#include <sys/_system_properties.h>
 
 #include <android/log.h>
-
 #include "log_portability.h"
 
+#ifndef BUILD_WITH_LINARO
+
+#include <sys/_system_properties.h>
 static pthread_mutex_t lock_loggable = PTHREAD_MUTEX_INITIALIZER;
 
 static int lock()
@@ -385,3 +386,29 @@ LIBLOG_ABI_PUBLIC int __android_log_security()
 
     return do_cache2(&security);
 }
+
+#else
+
+LIBLOG_HIDDEN int __android_log_is_debuggable()
+{
+	return 1;
+}
+
+LIBLOG_ABI_PUBLIC int __android_log_is_loggable(int prio, const char *tag,
+                                                int default_prio)
+{
+	return 1;
+}
+
+
+LIBLOG_ABI_PUBLIC clockid_t android_log_clockid()
+{
+	return CLOCK_MONOTONIC;
+}
+
+LIBLOG_ABI_PUBLIC int __android_log_security()
+{
+	return 1;
+}
+
+#endif
