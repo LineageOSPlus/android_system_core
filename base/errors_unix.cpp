@@ -18,6 +18,10 @@
 
 #include <errno.h>
 
+#ifdef BUILD_WITH_LINARO
+#include <cstring>
+#endif
+
 namespace android {
 namespace base {
 

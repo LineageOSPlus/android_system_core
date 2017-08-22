@@ -22,6 +22,10 @@
 
 #include <libgen.h>
 
+#ifdef BUILD_WITH_LINARO
+#include <cstring>
+#endif
+
 // For getprogname(3) or program_invocation_short_name.
 #if defined(__ANDROID__) || defined(__APPLE__)
 #include <stdlib.h>
