@@ -7,7 +7,6 @@ CPPFLAGS+= \
 LDFLAGS+= -shared
 
 SOURCES = \
-    CallStack.cpp \
     FileMap.cpp \
     JenkinsHash.cpp \
     LinearTransform.cpp \
