@@ -1,6 +1,10 @@
 ANDROID_TOP_DIR=$(shell realpath ../../..)
 
 SOURCES = \
+    ashmem-dev.c \
+    debugger.c \
+    klog.c \
+    qtaguid.c \
     config_utils.c \
     fs_config.c \
     canned_fs_config.c \
@@ -28,8 +32,10 @@ SOURCES = \
 
 CFLAGS+= \
     -fPIC \
+    -D_GNU_SOURCE \
     -DBUILD_WITH_LINARO \
-    -I$(ANDROID_TOP_DIR)/system/core/include
+    -I$(ANDROID_TOP_DIR)/system/core/include \
+    -I$(ANDROID_TOP_DIR)/system/core/base/include
 LDFLAGS+= -shared
 
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))

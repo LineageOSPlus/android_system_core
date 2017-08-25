@@ -37,6 +37,10 @@
 #define READONLY_CHECK_MS 5000
 #define READONLY_CHECK_TIMES 50
 
+#ifdef BUILD_WITH_LINARO
+#define __unused __attribute__((unused))
+#endif
+
 typedef struct {
     struct listnode list;
     struct mntent entry;

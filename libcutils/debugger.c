@@ -22,6 +22,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#ifdef BUILD_WITH_LINARO
+#include <stdint.h>
+#endif
 
 #include <cutils/debugger.h>
 #include <cutils/sockets.h>

@@ -30,7 +30,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#ifdef BUILD_WITH_LINARO
+#include <linux/android/ashmem.h>
+#else
 #include <linux/ashmem.h>
+#endif
 
 #include <cutils/ashmem.h>
 #include <log/log.h>
