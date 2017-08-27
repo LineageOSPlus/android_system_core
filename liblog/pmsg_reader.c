@@ -310,7 +310,11 @@ LIBLOG_ABI_PRIVATE ssize_t __android_log_pmsg_file_read(
     /* Initialize name list */
     list_init(&name_list);
 
+#ifndef BUILD_WITH_LINARO
+    ret = SSIZE_MAX;
+#else
     ret = SIZE_MAX;
+#endif
 
     /* Validate incoming prefix, shift until it contains only 0 or 1 : or / */
     prefix_len = 0;
@@ -569,7 +573,11 @@ LIBLOG_ABI_PRIVATE ssize_t __android_log_pmsg_file_read(
                 *strchr(names->name, ':') = '/'; /* Convert back to filename */
                 r = (*fn)(names->id, names->prio, names->name, buf, len, arg);
                 if ((ret >= 0) && (r > 0)) {
+#ifndef BUILD_WITH_LINARO
+                    if (ret == SSIZE_MAX) {
+#else
                     if (ret == SIZE_MAX) {
+#endif
                         ret = r;
                     } else {
                         ret += r;
@@ -583,5 +591,10 @@ LIBLOG_ABI_PRIVATE ssize_t __android_log_pmsg_file_read(
         list_remove(node);
         free(names);
     }
+#ifndef BUILD_WITH_LINARO
+    return (ret == SSIZE_MAX) ? -ENOENT : ret;
+#else
     return (ret == SIZE_MAX) ? -ENOENT : ret;
+#endif
+
 }
