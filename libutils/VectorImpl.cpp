@@ -346,6 +346,8 @@ ssize_t VectorImpl::setCapacity(size_t new_capacity)
     size_t new_allocation_size = 0;
 #ifndef BUILD_WITH_LINARO
     LOG_ALWAYS_FATAL_IF(!safe_mul(&new_allocation_size, new_capacity, mItemSize));
+#else
+    new_allocation_size = new_capacity * mItemSize;
 #endif
     SharedBuffer* sb = SharedBuffer::alloc(new_allocation_size);
     if (sb) {
@@ -392,6 +394,8 @@ void* VectorImpl::_grow(size_t where, size_t amount)
     size_t new_size;
 #ifndef BUILD_WITH_LINARO
     LOG_ALWAYS_FATAL_IF(!safe_add(&new_size, mCount, amount), "new_size overflow");
+#else
+    new_size = mCount + amount;
 #endif
 
     if (capacity() < new_size) {
@@ -408,6 +412,9 @@ void* VectorImpl::_grow(size_t where, size_t amount)
                             "new_capacity overflow");
         LOG_ALWAYS_FATAL_IF(!safe_add(&new_capacity, new_capacity, static_cast<size_t>(1u)),
                             "new_capacity overflow");
+#else
+	new_capacity = new_size + (new_size / 2);
+	new_capacity = new_capacity + static_cast<size_t>(1u);
 #endif
         new_capacity = max(kMinVectorCapacity, new_capacity);
 
@@ -415,6 +422,8 @@ void* VectorImpl::_grow(size_t where, size_t amount)
 #ifndef BUILD_WITH_LINARO
         LOG_ALWAYS_FATAL_IF(!safe_mul(&new_alloc_size, new_capacity, mItemSize),
                             "new_alloc_size overflow");
+#else
+	new_alloc_size = new_capacity * mItemSize;
 #endif
 
 //        ALOGV("grow vector %p, new_capacity=%d", this, (int)new_capacity);
@@ -476,6 +485,8 @@ void VectorImpl::_shrink(size_t where, size_t amount)
     size_t new_size;
 #ifndef BUILD_WITH_LINARO
     LOG_ALWAYS_FATAL_IF(!safe_sub(&new_size, mCount, amount));
+#else
+    new_size = mCount - amount;
 #endif
 
     if (new_size < (capacity() / 2)) {
